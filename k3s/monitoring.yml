@@ -1,0 +1,77 @@
+# 마스터 노드에 배포해야 하는 yaml 파일 (테스트를 돌린 후 데이터가 가야 하는 곳)
+# kubectl apply -f monitoring.yml
+# kubectl get pods 했을 때 influxdb와 grafana가 running 상태여야 함
+# 서버에 배포해야 하는 파일을 깃에서 관리하기 위해 푸시합니다!
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: influxdb
+  ports:
+    - protocol: TCP
+      port: 8086      # 외부에서 접속할 포트
+      targetPort: 8086
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:1.8
+        env:
+        - name: INFLUXDB_DB
+          value: jmeter
+        ports:
+        - containerPort: 8086
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: grafana
+  ports:
+    - protocol: TCP
+      port: 3000      # 외부에서 접속할 포트
+      targetPort: 3000
