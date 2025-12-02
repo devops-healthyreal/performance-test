@@ -1,0 +1,30 @@
+name: JMeter Load Test
+
+on:
+  workflow_dispatch: # 수동 실행 버튼
+    inputs:
+      thread_count:
+        description: '동시 접속자 수'
+        required: true
+        default: '10'
+      duration:
+        description: '테스트 시간(초)'
+        required: true
+        default: '60'
+
+jobs:
+  load-test:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run JMeter
+        run: |
+          echo "Load Test Start"
+          $HOME/jmeter/bin/jmeter -n \
+          -t tests/performance/load_test.jmx \
+          -Jthread_count=${{ inputs.thread_count }} \
+          -Jduration=${{ inputs.duration }} \
+          -f -l result.jtl
+          echo "Test Finished"
