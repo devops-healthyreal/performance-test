@@ -6,11 +6,9 @@ services:
     container_name: jmeter-prometheus
     ports:
       - "9270:9270"       # Prometheus metrics
-      - "1099:1099"       # RMI
-      - "50000:50000"     # JMeter server port
+      - "5100:5100"       # RMI local port
+      - "5101:5101"       # RMI server port
     volumes:
-      - ./tests:/tests
-      - ./results:/results
-    environment:
-      - JVM_ARGS=-Xms512m -Xmx1g
+      - /home/ubuntu/performance-test:/tmp/performance-test
+      - /home/ubuntu/results:/tmp/results
     restart: always

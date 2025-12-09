@@ -35,12 +35,12 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no $JMETER_SERVER '
                           docker exec -i $JMETER_CONTAINER jmeter -n \
-                            -t $JMETER_DIR/tests/performance/load_test.jmx \
-                            -l $RESULTS_DIR/result-$(date +%H%M).jtl \
+                            -t /tmp/performance-test/tests/performance/load_test.jmx \
+                            -l /tmp/results/result-\$(date +%H%M%S).jtl \
                             -Jbackend_prometheus.port=9270 \
                             -Jbackend_prometheus.metric_path=/metrics \
                             -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \
-                            -e -o $RESULTS_DIR/report-$(date +%H%M)
+                            -e -o /tmp/results/report
                         '
                     """
                 }
