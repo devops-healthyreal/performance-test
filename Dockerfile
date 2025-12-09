@@ -7,8 +7,8 @@ RUN mkdir -p /opt/apache-jmeter-5.5/lib/ext
 RUN wget -q -O /opt/apache-jmeter-5.5/lib/ext/jmeter-prometheus-plugin.jar \
     https://github.com/johrstrom/jmeter-prometheus-plugin/releases/download/0.6.2/jmeter-prometheus-plugin-0.6.2.jar
     
-RUN wget -q -O /opt/apache-jmeter-5.5/lib/metrics-core-2.2.0.jar \
-    https://repo1.maven.org/maven2/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar
+RUN wget -O /opt/apache-jmeter-5.5/lib/metrics-core-3.2.6.jar \
+    https://repo1.maven.org/maven2/io/dropwizard/metrics/metrics-core/3.2.6/metrics-core-3.2.6.jar
 
 # JMeter 서버 모드로 항상 실행되게 설정
-CMD ["-s", "-Jbackend_prometheus.port=9270", "-Jbackend_prometheus.metric_path=/metrics", "-Dserver.rmi.localport=5100", "-Dserver_port=5101", "-Djava.rmi.server.hostname=0.0.0.0", "-Dserver.rmi.ssl.disable=true"]
+CMD ["-s", "-Jbackend_prometheus.port=9270","-Jbackend_prometheus.metric_path=/metrics","-Jbackend_prometheus.address=0.0.0.0","-Dserver.rmi.localport=5100","-Dserver_port=5101","-Djava.rmi.server.hostname=0.0.0.0","-Dserver.rmi.ssl.disable=true"]

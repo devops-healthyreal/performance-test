@@ -39,7 +39,7 @@ pipeline {
                             if [ -d /tmp/results/report ] && [ \\"\\\$(ls -A /tmp/results/report)\\" ]; then
                             echo '⚠️ /tmp/results/report not empty — cleaning up...'
                             rm -rf /tmp/results/report/*
-                            rm -rf /tmp/results/*
+                            rm -f /tmp/results/*
                             else
                             echo '✅ /tmp/results/report is already empty or does not exist.'
                             fi
@@ -51,6 +51,7 @@ pipeline {
                             -l /tmp/results/result.jtl \
                             -Jbackend_prometheus.port=9270 \
                             -Jbackend_prometheus.metric_path=/metrics \
+                            -Jbackend_prometheus.address=0.0.0.0 \
                             -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \
                             -Jserver.rmi.localhostname=0.0.0.0 \
                             -e -o /tmp/results/report

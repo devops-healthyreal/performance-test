@@ -7,8 +7,16 @@
       </elementProp>
     </TestPlan>
     <hashTree>
-      <com.github.johrstrom.listener.PrometheusListener guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui" testclass="com.github.johrstrom.listener.PrometheusListener" testname="Prometheus Listener" enabled="true">
-        <collectionProp name="prometheus.collector_definitions"/>
+      <com.github.johrstrom.listener.PrometheusListener
+          guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui"
+          testclass="com.github.johrstrom.listener.PrometheusListener"
+          testname="Prometheus Listener"
+          enabled="true">
+
+          <stringProp name="prometheus.port">9270</stringProp>
+          <stringProp name="prometheus.path">/metrics</stringProp>
+          <stringProp name="prometheus.address">0.0.0.0</stringProp>
+          <collectionProp name="prometheus.collector_definitions"/>
       </com.github.johrstrom.listener.PrometheusListener>
       <hashTree/>
       <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group">
