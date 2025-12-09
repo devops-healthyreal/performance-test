@@ -4,26 +4,29 @@ pipeline {
     environment {
         REMOTE_HOST = "3.39.158.19"
         REMOTE_USER = "ubuntu"
-        TEST_DIR = "/home/ubuntu/test"
+        REPO_URL = "https://github.com/devops-healthyreal/performance-test.git"
+        REPO_DIR = "/home/ubuntu/performance-test"      // 클론 받을 위치
+        TEST_DIR = "${REPO_DIR}/tests/performance"
         RESULT_DIR = "/home/ubuntu/results"
-        JMETER_FILE = "./tests/performance/load_test.jmx"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Git Clone or Pull on Remote Server') {
             steps {
-                echo "📥 GitHub 저장소에서 소스 코드 가져오는 중..."
-                checkout scm
-            }
-        }
-
-        stage('Deploy JMeter Test File') {
-            steps {
-                echo "📤 JMeter 테스트 파일을 원격 서버로 전송 중..."
-                sshagent (credentials: ['admin']) {
+                echo "📥 원격 서버에서 GitHub 리포지토리 업데이트 중..."
+                sshagent(credentials: ['admin']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} 'mkdir -p ${TEST_DIR} ${RESULT_DIR}'
-                        scp -o StrictHostKeyChecking=no ${JMETER_FILE} ${REMOTE_USER}@${REMOTE_HOST}:${TEST_DIR}/load_test.jmx
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                            if [ ! -d "${REPO_DIR}/.git" ]; then
+                                echo "🔹 리포지토리가 존재하지 않아 clone 진행 중..."
+                                git clone ${REPO_URL}
+                            else
+                                echo "🔹 기존 리포지토리 업데이트 중..."
+                                cd ${REPO_DIR}
+                                git fetch --all
+                                git reset --hard origin/main
+                            fi
+                        '
                     """
                 }
             }
@@ -31,16 +34,18 @@ pipeline {
 
         stage('Run JMeter Test') {
             steps {
-                echo "🚀 원격 서버에서 JMeter 테스트 실행 중..."
-                sshagent (credentials: ['admin']) {
+                echo "🚀 원격 서버에서 JMeter 부하 테스트 실행 중..."
+                sshagent(credentials: ['admin']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
-                            jmeter -n \
-                              -t ${TEST_DIR}/load_test.jmx \
-                              -l ${RESULT_DIR}/result.jtl \
-                              -Jbackend_prometheus.port=9270 \
-                              -Jbackend_prometheus.metric_path=/metrics \
-                              -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \
+                            mkdir -p ${RESULT_DIR}
+                            cd ${TEST_DIR}
+                            jmeter -n \\
+                              -t ${TEST_DIR}/load_test.jmx \\
+                              -l ${RESULT_DIR}/result.jtl \\
+                              -Jbackend_prometheus.port=9270 \\
+                              -Jbackend_prometheus.metric_path=/metrics \\
+                              -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \\
                               -e -o ${RESULT_DIR}/report
                         '
                     """
@@ -51,7 +56,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ JMeter 테스트 완료 — 결과 파일은 /home/ubuntu/results/ 에 저장됨"
+            echo "✅ JMeter 부하 테스트 완료! 결과 리포트: /home/ubuntu/results/report"
         }
         failure {
             echo "❌ 빌드 실패 — 로그를 확인하세요."
