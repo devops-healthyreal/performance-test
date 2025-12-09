@@ -54,6 +54,7 @@ pipeline {
                             -Jbackend_prometheus.address=0.0.0.0 \
                             -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \
                             -Jserver.rmi.localhostname=0.0.0.0 \
+                            -Djava.net.preferIPv4Stack=true \
                             -e -o /tmp/results/report
                         '
                     """

@@ -12,3 +12,17 @@ services:
       - /home/ubuntu/performance-test:/tmp/performance-test
       - /home/ubuntu/results:/tmp/results
     restart: always
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    restart: always
+    depends_on:
+      - jmeter

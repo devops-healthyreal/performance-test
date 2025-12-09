@@ -13,7 +13,7 @@
           testname="Prometheus Listener"
           enabled="true">
 
-          <stringProp name="prometheus.port">9270</stringProp>
+          <stringProp name="prometheus.port">9271</stringProp>
           <stringProp name="prometheus.path">/metrics</stringProp>
           <stringProp name="prometheus.address">0.0.0.0</stringProp>
           <collectionProp name="prometheus.collector_definitions"/>
