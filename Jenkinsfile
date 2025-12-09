@@ -39,6 +39,7 @@ pipeline {
                             if [ -d /tmp/results/report ] && [ \\"\\\$(ls -A /tmp/results/report)\\" ]; then
                             echo '⚠️ /tmp/results/report not empty — cleaning up...'
                             rm -rf /tmp/results/report/*
+                            rm -rf /tmp/results/*
                             else
                             echo '✅ /tmp/results/report is already empty or does not exist.'
                             fi

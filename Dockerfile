@@ -5,7 +5,7 @@ RUN mkdir -p /opt/apache-jmeter-5.5/lib/ext
 
 # Prometheus Backend Listener 플러그인 설치
 RUN wget -q -O /opt/apache-jmeter-5.5/lib/ext/jmeter-prometheus-plugin.jar \
-    https://github.com/johrstrom/jmeter-prometheus-plugin/releases/download/0.6.0/jmeter-prometheus-plugin-0.6.0.jar
+    https://github.com/johrstrom/jmeter-prometheus-plugin/releases/download/0.6.2/jmeter-prometheus-plugin-0.6.2.jar
     
 RUN wget -q -O /opt/apache-jmeter-5.5/lib/metrics-core-2.2.0.jar \
     https://repo1.maven.org/maven2/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar
