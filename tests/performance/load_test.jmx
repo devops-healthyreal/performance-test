@@ -335,7 +335,42 @@
           <stringProp name="prometheus.port">9270</stringProp>
           <stringProp name="prometheus.path">/metrics</stringProp>
           <stringProp name="prometheus.address">0.0.0.0</stringProp>
-          <collectionProp name="prometheus.collector_definitions"/>
+          <collectionProp name="prometheus.collector_definitions">
+            <elementProp name="requests_total" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">Total number of requests</stringProp>
+              <stringProp name="collector.metric_name">jmeter_requests_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="label">label</stringProp>
+                <stringProp name="code">code</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.listen_to">samples</stringProp>
+              <stringProp name="listener.collector.measuring">CountTotal</stringProp>
+            </elementProp>
+            <elementProp name="success_total" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">Total number of successful requests</stringProp>
+              <stringProp name="collector.metric_name">jmeter_success_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="label">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.listen_to">samples</stringProp>
+              <stringProp name="listener.collector.measuring">SuccessTotal</stringProp>
+            </elementProp>
+            <elementProp name="failure_total" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">Total number of failed requests</stringProp>
+              <stringProp name="collector.metric_name">jmeter_failure_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="label">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.listen_to">samples</stringProp>
+              <stringProp name="listener.collector.measuring">FailureTotal</stringProp>
+            </elementProp>
+          </collectionProp>
       </com.github.johrstrom.listener.PrometheusListener>
       <hashTree/>
     </hashTree>
