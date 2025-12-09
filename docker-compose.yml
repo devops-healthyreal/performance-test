@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  jmeter:
+    build: .
+    container_name: jmeter-prometheus
+    ports:
+      - "9270:9270"       # Prometheus metrics
+      - "1099:1099"       # RMI
+      - "50000:50000"     # JMeter server port
+    volumes:
+      - ./tests:/tests
+      - ./results:/results
+    environment:
+      - JVM_ARGS=-Xms512m -Xmx1g
+    restart: always
