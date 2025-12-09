@@ -34,12 +34,24 @@ pipeline {
                 sshagent(['admin']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no $JMETER_SERVER '
-                          docker exec -i $JMETER_CONTAINER jmeter -n \
+                        echo "🧹 Checking if /tmp/results/report is non-empty..."
+                        docker exec -i $JMETER_CONTAINER sh -c "
+                            if [ -d /tmp/results/report ] && [ \\"\\\$(ls -A /tmp/results/report)\\" ]; then
+                            echo '⚠️ /tmp/results/report not empty — cleaning up...'
+                            rm -rf /tmp/results/report/*
+                            else
+                            echo '✅ /tmp/results/report is already empty or does not exist.'
+                            fi
+                        "
+
+                        echo "🚀 Starting JMeter test..."
+                        docker exec -i $JMETER_CONTAINER jmeter -n \
                             -t /tmp/performance-test/tests/performance/load_test.jmx \
-                            -l /tmp/results/result-\$(date +%H%M%S).jtl \
+                            -l /tmp/results/result.jtl \
                             -Jbackend_prometheus.port=9270 \
                             -Jbackend_prometheus.metric_path=/metrics \
                             -Jbackend_prometheus.classname=io.jmeter.plugins.prometheus.Listener \
+                            -Jserver.rmi.localhostname=0.0.0.0 \
                             -e -o /tmp/results/report
                         '
                     """

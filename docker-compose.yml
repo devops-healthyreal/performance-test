@@ -5,7 +5,7 @@ services:
     build: .
     container_name: jmeter-prometheus
     ports:
-      - "9270:9270"       # Prometheus metrics
+      - "8070:9270"       # Prometheus metrics
       - "5100:5100"       # RMI local port
       - "5101:5101"       # RMI server port
     volumes:
