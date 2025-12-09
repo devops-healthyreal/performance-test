@@ -7,18 +7,7 @@
       </elementProp>
     </TestPlan>
     <hashTree>
-      <com.github.johrstrom.listener.PrometheusListener
-          guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui"
-          testclass="com.github.johrstrom.listener.PrometheusListener"
-          testname="Prometheus Listener"
-          enabled="true">
-
-          <stringProp name="prometheus.port">9271</stringProp>
-          <stringProp name="prometheus.path">/metrics</stringProp>
-          <stringProp name="prometheus.address">0.0.0.0</stringProp>
-          <collectionProp name="prometheus.collector_definitions"/>
-      </com.github.johrstrom.listener.PrometheusListener>
-      <hashTree/>
+      
       <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group">
         <stringProp name="TestPlan.comments">회원가입</stringProp>
         <intProp name="ThreadGroup.num_threads">1</intProp>
@@ -337,6 +326,23 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
+      <com.github.johrstrom.listener.PrometheusListener
+          guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui"
+          testclass="com.github.johrstrom.listener.PrometheusListener"
+          testname="Prometheus Listener"
+          enabled="true">
+
+          <stringProp name="prometheus.port">9270</stringProp>
+          <stringProp name="prometheus.path">/metrics</stringProp>
+          <stringProp name="prometheus.address">0.0.0.0</stringProp>
+          <collectionProp name="prometheus.collector_definitions">
+            <elementProp name="DefaultCollector" elementType="com.github.johrstrom.collector.SampleCollector">
+              <stringProp name="collector.name">default</stringProp>
+              <boolProp name="collector.enabled">true</boolProp>
+            </elementProp>
+          </collectionProp>
+      </com.github.johrstrom.listener.PrometheusListener>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
