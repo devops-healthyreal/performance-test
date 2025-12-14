@@ -1,3 +1,4 @@
+# Dockerfile
 FROM justb4/jmeter:latest
 
 # JMeter 확장 플러그인 폴더 생성
@@ -12,3 +13,4 @@ RUN wget -O /opt/apache-jmeter-5.5/lib/metrics-core-3.2.6.jar \
 
 # JMeter 서버 모드로 항상 실행되게 설정
 CMD ["-s", "-Jbackend_prometheus.port=9270","-Jbackend_prometheus.metric_path=/metrics","-Jbackend_prometheus.address=0.0.0.0","-Dserver.rmi.localport=5100","-Dserver_port=5101","-Djava.rmi.server.hostname=0.0.0.0","-Dserver.rmi.ssl.disable=true"]
+
